@@ -1,0 +1,197 @@
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:talabang_mandau/app/components/dialog.dart';
+import 'package:talabang_mandau/app/components/loading.dart';
+import 'package:talabang_mandau/app/data/service_provider.dart';
+import 'package:talabang_mandau/app/modules/kejadian/controllers/kejadian_controller.dart';
+
+class CreateKejadianController extends GetxController {
+  //TODO: Implement CreateKejadianController
+
+  TextEditingController dateController = TextEditingController();
+  RxDouble lat = 0.0.obs;
+  RxDouble lng = 0.0.obs;
+  TextEditingController koordinatController = TextEditingController();
+  TextEditingController lokasiController = TextEditingController();
+  TextEditingController keteranganController = TextEditingController();
+
+  File? dokumentasiFile;
+  RxString dokumentasiUrl = "".obs;
+
+  RxList listJenisKejadian = [].obs;
+  JenisKejadian? jenisKejadian;
+
+  @override
+  void onInit() {
+    super.onInit();
+    fetchJenisKejadian();
+
+    log("${GetStorage().read("token")}");
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+  }
+
+  fetchJenisKejadian() async {
+    var response = await ServiceProvider().fetchJenisKejadian();
+
+    print("response: $response");
+
+    if (response != null) {
+      List listData = response["data"];
+      for (var i = 0; i < listData.length; i++) {
+        listJenisKejadian.add(JenisKejadian(
+            id: listData[i]["id"], jenis: listData[i]["jenis_kejadian"]));
+      }
+    }
+  }
+
+  void pickDateTime(
+      BuildContext context, TextEditingController controller) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (pickedDate != null) {
+      TimeOfDay? pickedTime = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
+
+      if (pickedTime != null) {
+        final DateTime combinedDateTime = DateTime(
+          pickedDate.year,
+          pickedDate.month,
+          pickedDate.day,
+          pickedTime.hour,
+          pickedTime.minute,
+        );
+
+        controller.text =
+            DateFormat('yyyy-MM-dd HH:mm:ss').format(combinedDateTime);
+      }
+    }
+  }
+
+  void showImagePicker(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext builder) {
+        return Container(
+          height: 160,
+          padding: EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              ElevatedButton(
+                onPressed: () {
+                  getImage(ImageSource.camera);
+                  Navigator.pop(context);
+                },
+                child: Text('Ambil Gambar dari Kamera'),
+              ),
+              SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  getImage(ImageSource.gallery);
+                  Navigator.pop(context);
+                },
+                child: Text('Pilih Gambar dari Galeri'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  XFile? imageFile;
+
+  Future<void> getImage(ImageSource source) async {
+    try {
+      final ImagePicker picker = ImagePicker();
+      XFile? imageFile =
+          await picker.pickImage(source: source, imageQuality: 25);
+
+      if (imageFile != null) {
+        showLoading();
+
+        var result = await FlutterImageCompress.compressWithFile(
+          imageFile.path,
+          minHeight: 720,
+        );
+
+        setImage(imageFile);
+      }
+    } catch (e) {
+      print('Error saat mengambil gambar: $e');
+      onLoadingDismiss();
+      errorMessage("Gagal mengambil gambar.");
+    }
+  }
+
+  setImage(XFile result) async {
+    if (result != null) {
+      dokumentasiFile = File(result.path);
+      print("result: ${result.path}");
+      dokumentasiUrl.value = result.path;
+      onLoadingDismiss();
+      successMessage(Get.context, "Berhasil mengambil gambar.");
+    } else {
+      onLoadingDismiss();
+      errorMessage("Gagal mengambil gambar.");
+    }
+  }
+
+  createIncident() async {
+    showLoading();
+    var response = await ServiceProvider().createIncident(
+        dateController.text,
+        lat.value,
+        lng.value,
+        lokasiController.text,
+        keteranganController.text,
+        jenisKejadian!.id,
+        dokumentasiFile!);
+
+    print("response: $response");
+
+    if (response != null) {
+      KejadianController kejadianController = Get.put(KejadianController());
+      await kejadianController.fetchDataListKejadian();
+      Get.back();
+      onLoadingDismiss();
+      successMessage(Get.context, "${response["message"]}");
+    } else {
+      onLoadingDismiss();
+    }
+  }
+}
+
+class JenisKejadian {
+  final int id;
+  final String jenis;
+
+  JenisKejadian({
+    required this.id,
+    required this.jenis,
+  });
+}
