@@ -1,11 +1,12 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:talabang_mandau/app/data/kejadianItem.dart';
+import 'package:talabang_mandau/app/data/providers/incident_provider.dart';
 import 'package:talabang_mandau/app/data/service_provider.dart';
 
 class KejadianController extends GetxController {
   //TODO: Implement KejadianController
-
+  final incidentProvider = IncidentProvider();
   List<String> listTypeFilter = ["BELUM DITANGANI", "PENANGANAN", "SELESAI"];
 
   RxString typeFilter = 'BELUM DITANGANI'.obs;
@@ -33,24 +34,24 @@ class KejadianController extends GetxController {
   fetchDataListKejadian() async {
     isListKejadianExist.value = false;
 
-    var response = await ServiceProvider()
+    var response = await incidentProvider
         .fetchDataListKejadian(typeFilter.value, typeDuration.value);
 
     print("response:$response");
 
-    if (response != null) {
-      if (response["ok"]) {
-        listKejadian = (response["data"] as List<dynamic>)
+    if (response["payload"] != null) {
+      // if (response[""]) {
+        listKejadian = (response["payload"] as List<dynamic>)
             .map((item) => Kejadian.fromJson(item as Map<String, dynamic>))
             .toList();
 
         print("listKegiatan:${listKejadian}");
         isListKejadianExist.value = true;
         update();
-      } else {
-        isListKejadianExist.value = true;
-        update();
-      }
+      // } else {
+      //   isListKejadianExist.value = true;
+      //   update();
+      // }
     }
   }
 

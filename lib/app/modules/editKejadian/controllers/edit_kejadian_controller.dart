@@ -9,12 +9,13 @@ import 'package:talabang_mandau/app/components/dialog.dart';
 import 'package:talabang_mandau/app/components/loading.dart';
 import 'package:talabang_mandau/app/data/kegiatanDetail.dart';
 import 'package:talabang_mandau/app/data/kejadianDetail.dart';
+import 'package:talabang_mandau/app/data/providers/incident_provider.dart';
 import 'package:talabang_mandau/app/data/service_provider.dart';
 import 'package:talabang_mandau/app/modules/detailKejadian/controllers/detail_kejadian_controller.dart';
 
 class EditKejadianController extends GetxController {
   //TODO: Implement EditKejadianController
-
+  final incidentProvider = IncidentProvider();
   TextEditingController detailController = TextEditingController();
   TextEditingController koordinatController = TextEditingController();
 
@@ -122,7 +123,7 @@ class EditKejadianController extends GetxController {
 
   updateKegiatan() async {
     showLoading();
-    var response = await ServiceProvider().updateKejadian(
+    var response = await incidentProvider.updateKejadian(
         dataDetailKejadian!.id,
         detailController.text,
         dokumentFile,

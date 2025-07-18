@@ -7,10 +7,12 @@ import 'package:image_picker/image_picker.dart';
 import 'package:talabang_mandau/app/components/dialog.dart';
 import 'package:talabang_mandau/app/components/loading.dart';
 import 'package:talabang_mandau/app/data/kegiatanDetail.dart';
+import 'package:talabang_mandau/app/data/providers/activity_provider.dart';
 import 'package:talabang_mandau/app/data/service_provider.dart';
 import 'package:talabang_mandau/app/modules/detailKegiatan/controllers/detail_kegiatan_controller.dart';
 
 class EditKegiatanController extends GetxController {
+  final activityProvider = ActivityProvider();
   //TODO: Implement EditKegiatanController
 
   TextEditingController detailController = TextEditingController();
@@ -112,7 +114,7 @@ class EditKegiatanController extends GetxController {
 
   updateKegiatan() async {
     showLoading();
-    var response = await ServiceProvider().updateKegiatan(
+    var response = await activityProvider.updateKegiatan(
         dataDetailKegiatan!.id, detailController.text, dokumentFile);
 
     print("response:$response");

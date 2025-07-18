@@ -1,12 +1,13 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:talabang_mandau/app/data/kegiatanItem.dart';
+import 'package:talabang_mandau/app/data/providers/activity_provider.dart';
 import 'package:talabang_mandau/app/data/service_provider.dart';
 
 class KegiatanController extends GetxController {
-  //TODO: Implement KegiatanController
 
   List<String> listTypeFilter = ["Aktif", "Semua"];
+  final activityProvider = ActivityProvider();
 
   RxString typeFilter = 'Aktif'.obs;
   RxInt typeDuration = 3.obs;
@@ -30,17 +31,16 @@ class KegiatanController extends GetxController {
     super.onClose();
   }
 
-  fetchDataListKegiatan() async {
+  Future<void> fetchDataListKegiatan() async {
     isListKegiatanExist.value = false;
 
-    var response = await ServiceProvider()
-        .fetchDataListKegiatan(typeFilter.value, typeDuration.value);
+    var response = await activityProvider.fetchDataListKegiatan(typeFilter.value, typeDuration.value);
 
     print("response:$response");
 
     if (response != null) {
-      if (response["ok"]) {
-        listKegiatan = (response["data"] as List<dynamic>)
+      if (response["payload"]!=null) {
+        listKegiatan = (response["payload"] as List<dynamic>)
             .map((item) => Kegiatan.fromJson(item as Map<String, dynamic>))
             .toList();
 
@@ -54,7 +54,7 @@ class KegiatanController extends GetxController {
     }
   }
 
-  convertTime(originalDate) {
+  String convertTime(originalDate) {
     // Parse string ke DateTime
 
     String formattedDate = "";

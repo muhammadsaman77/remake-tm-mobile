@@ -5,9 +5,11 @@ import 'package:get_storage/get_storage.dart';
 import 'package:talabang_mandau/app/components/dialog.dart';
 import 'package:talabang_mandau/app/data/kegiatanDetail.dart';
 import 'package:talabang_mandau/app/data/kegiatanItem.dart';
+import 'package:talabang_mandau/app/data/providers/activity_provider.dart';
 import 'package:talabang_mandau/app/data/service_provider.dart';
 
 class DetailKegiatanController extends GetxController {
+  final activityProvider = ActivityProvider();
   GetStorage box = GetStorage();
   var dataArguments = Get.arguments;
   Kegiatan? dataKegiatan;
@@ -31,18 +33,18 @@ class DetailKegiatanController extends GetxController {
     isDetailKegiatanExist.value = false;
 
     var response =
-        await ServiceProvider().fetchDataDetailKegiatan(dataKegiatan!.id);
+        await activityProvider.fetchDataDetailKegiatan(dataKegiatan!.id);
     print("response: $response");
 
-    if (response != null) {
+    if (response["payload"] != null) {
       dataDetailKegiatan =
-          KegiatanDetail.fromJson(response["data"]["kegiatan"]);
+          KegiatanDetail.fromJson(response["payload"]);
 
       // Ambil data log
-      if (response["data"]["kegiatan_log"] != null) {
-        dataLog.value =
-            List<Map<String, dynamic>>.from(response["data"]["kegiatan_log"]);
-      }
+      // if (response["data"]["kegiatan_log"] != null) {
+      //   dataLog.value =
+      //       List<Map<String, dynamic>>.from(response["data"]["kegiatan_log"]);
+      // }
 
       isDetailKegiatanExist.value = true;
       update();

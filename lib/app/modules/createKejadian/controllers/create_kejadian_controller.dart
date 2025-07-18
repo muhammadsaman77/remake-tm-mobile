@@ -10,12 +10,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:talabang_mandau/app/components/dialog.dart';
 import 'package:talabang_mandau/app/components/loading.dart';
+import 'package:talabang_mandau/app/data/providers/incident_provider.dart';
 import 'package:talabang_mandau/app/data/service_provider.dart';
 import 'package:talabang_mandau/app/modules/kejadian/controllers/kejadian_controller.dart';
 
 class CreateKejadianController extends GetxController {
   //TODO: Implement CreateKejadianController
-
+  final  incidentProvider = IncidentProvider();
   TextEditingController dateController = TextEditingController();
   RxDouble lat = 0.0.obs;
   RxDouble lng = 0.0.obs;
@@ -48,7 +49,7 @@ class CreateKejadianController extends GetxController {
   }
 
   fetchJenisKejadian() async {
-    var response = await ServiceProvider().fetchJenisKejadian();
+    var response = await incidentProvider.fetchJenisKejadian();
 
     print("response: $response");
 
@@ -163,7 +164,7 @@ class CreateKejadianController extends GetxController {
 
   createIncident() async {
     showLoading();
-    var response = await ServiceProvider().createIncident(
+    var response = await incidentProvider.createIncident(
         dateController.text,
         lat.value,
         lng.value,

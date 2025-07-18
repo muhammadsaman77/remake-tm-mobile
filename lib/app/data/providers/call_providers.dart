@@ -16,7 +16,7 @@ class CallProviders extends GetConnect{
 
       if (token != null) {
         final response = await get('$urlApi/api/vidcall/session',
-            headers: {'Authorization': "bearer $username $token"});
+            headers: {'Authorization': "Bearer $token","Accept": "application/json",});
         var data = response.body;
         if (response.isOk) {
           print(data);

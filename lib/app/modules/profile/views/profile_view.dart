@@ -130,7 +130,7 @@ class ProfileView extends GetView<ProfileController> {
                           ),
                           CText(
                             controller.dataProfile != null
-                                ? controller.dataProfile!.kesatuan
+                                ? controller.dataProfile!.kesatuan.kesatuan
                                 : "-",
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -150,9 +150,7 @@ class ProfileView extends GetView<ProfileController> {
                             color: Color(0xFFACACAC),
                           ),
                           CText(
-                            controller.dataProfile != null
-                                ? controller.dataProfile!.statusDinasKegiatan
-                                : "-",
+                            controller.dataProfile?.statusDinasKegiatan ?? "-"   ,
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                           )

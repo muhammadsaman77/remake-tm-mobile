@@ -10,11 +10,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:talabang_mandau/app/components/dialog.dart';
 import 'package:talabang_mandau/app/components/loading.dart';
+import 'package:talabang_mandau/app/data/providers/activity_provider.dart';
 import 'package:talabang_mandau/app/data/service_provider.dart';
 import 'package:talabang_mandau/app/modules/kegiatan/controllers/kegiatan_controller.dart';
 
 class CreateKegiatanController extends GetxController {
   //TODO: Implement CreateKegiatanController
+  final activityProvider = ActivityProvider();
 
   TextEditingController startDateController = TextEditingController();
   TextEditingController endDateController = TextEditingController();
@@ -50,7 +52,7 @@ class CreateKegiatanController extends GetxController {
   }
 
   fetchJenisKegiatan() async {
-    var response = await ServiceProvider().fetchJenisKegiatan();
+    var response = await activityProvider.fetchJenisKegiatan();
 
     print("response: $response");
 
@@ -165,7 +167,7 @@ class CreateKegiatanController extends GetxController {
 
   createActivity() async {
     showLoading();
-    var response = await ServiceProvider().createActivity(
+    var response = await activityProvider.createActivity(
         startDateController.text,
         endDateController.text,
         partnerController.text,

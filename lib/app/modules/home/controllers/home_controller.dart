@@ -82,15 +82,16 @@ class HomeController extends GetxController {
 
     print("responseFetchDataProfile: $responseFetchDataProfile");
 
-    if (responseFetchDataProfile != null) {
-      if (responseFetchDataProfile["ok"]) {
-        box.write("userData", responseFetchDataProfile["data"]);
+
+      if (responseFetchDataProfile["payload"]!= null) {
+        box.write("userData", responseFetchDataProfile["payload"]);
         print("userData: ${box.read("userData")}");
         dataProfile = UserData.fromJson(box.read("userData"));
-        print("Nama User: ${dataProfile!.absensiWaktuDatang}");
+        print("data profile : $dataProfile");
+        // print("Nama User: ${dataProfile!.absensiWaktuDatang}");
         update();
       }
-    }
+
   }
 
   bool isCallOngoing = false;
@@ -98,9 +99,9 @@ class HomeController extends GetxController {
   Future fetchDataSessions() async {
     showLoading();
     var response = await CallProviders().getSessionId();
-
+  print("=======");
     print("fetchDataSessions:$response");
-
+    print("=======");
 
       if (response["payload"] != null) {
 
