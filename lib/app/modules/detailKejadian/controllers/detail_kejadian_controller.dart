@@ -33,16 +33,16 @@ class DetailKejadianController extends GetxController {
         await incidentProvider.fetchDataDetailKejadian(dataKejadian!.id);
     print("response: $response");
 
-    if (response != null) {
+    if (response["payload"] != null) {
       dataDetailKejadian =
-          KejadianDetail.fromJson(response["data"]["kejadian"]);
+          KejadianDetail.fromJson(response["payload"]);
 
       // Ambil data log
-      if (response["data"]["kejadian_log"] != null) {
-        dataLog.value =
-            List<Map<String, dynamic>>.from(response["data"]["kejadian_log"]);
-        // updateDataWithLatestLog();
-      }
+      // if (response["data"]["kejadian_log"] != null) {
+      //   dataLog.value =
+      //       List<Map<String, dynamic>>.from(response["data"]["kejadian_log"]);
+      //   // updateDataWithLatestLog();
+      // }
 
       isDetailKejadianExist.value = true;
       update();

@@ -57,7 +57,7 @@ class IncidentProvider extends GetConnect{
 
       print("username: $username");
 
-      String url = "$urlApi/api/kejadians";
+      String url = "$urlApi/api/incidents";
 
       // if (status == "SELESAI") {
       //   url =
@@ -115,22 +115,17 @@ class IncidentProvider extends GetConnect{
 
       print("username: $username");
 
-      String url = '$urlApi/kejadian/detail?id_kejadian=$id';
+      String url = '$urlApi/api/incidents/$id';
 
       if (token != null) {
         final response = await get(url,
-            headers: {'Authorization': "bearer $username $token"});
+            headers: {'Authorization': "Bearer $token"});
         var data = response.body;
 
         print("data detail kejadian : $data");
 
-        if (data["ok"] != null) {
-          if (data["ok"]) {
-            return data;
-          } else {
-            errorMessage("Gagal mengambil data kejadian", "${data["message"]}");
-            return null;
-          }
+        if (response.isOk) {
+          return data;
         } else {
           // showLoading();
           // var responseLogout = await logout();
