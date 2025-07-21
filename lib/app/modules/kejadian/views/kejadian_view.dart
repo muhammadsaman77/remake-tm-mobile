@@ -25,8 +25,7 @@ class KejadianView extends GetView<KejadianController> {
         ),
         actions: [
           SizedBox(
-            height: 48,
-            child: Image.asset(
+            height: 48, child: Image.asset(
               "assets/icon/logo_telabang_icon.png",
               fit: BoxFit.cover,
             ),
@@ -98,11 +97,16 @@ class KejadianView extends GetView<KejadianController> {
           Obx(
             () => controller.isListKejadianExist.value
                 ? Expanded(
-                    child: ListView.builder(
-                      itemCount: controller.listKejadian.length,
-                      itemBuilder: (context, index) {
-                        return activityCard(context, index);
+                    child: RefreshIndicator(
+                      onRefresh:  () async {
+                      await  controller.fetchDataListKejadian();
                       },
+                      child: ListView.builder(
+                        itemCount: controller.listKejadian.length,
+                        itemBuilder: (context, index) {
+                          return activityCard(context, index);
+                        },
+                      ),
                     ),
                   )
                 : Center(child: CircularProgressIndicator()),

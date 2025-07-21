@@ -221,17 +221,17 @@ class ActivityProvider extends GetConnect{
 
     try {
       final token = await box.read("token");
-      final username = await box.read("username");
+
 
       if (token != null) {
-        final response = await get('$urlApi/kegiatan/jenis?nrp=$username',
-            headers: {'Authorization': "bearer $username $token"});
+        final response = await get('$urlApi/kegiatan/jenis?nrp=',
+            headers: {'Authorization': "Bearer $token"});
         var data = response.body;
 
         print("data fetch JenisKegiatan : $data");
 
-        if (data["ok"] != null) {
-          if (data["ok"]) {
+        if (data["success"] != null) {
+          if (data["success"]) {
             return data;
           } else {
             errorMessage(

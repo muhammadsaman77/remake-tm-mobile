@@ -90,51 +90,6 @@ class ServiceProvider extends GetConnect {
   }
 
 
-  Future fetchJenisLokasi() async {
-    GetStorage box = GetStorage();
-
-    try {
-      final token = await box.read("token");
-      final username = await box.read("username");
-
-      if (token != null) {
-        final response = await get('$urlApi/lokasi-vital/jenis',
-            headers: {'Authorization': "bearer $username $token"});
-        var data = response.body;
-
-        print("data fetchJenisLokasi : $data");
-
-        if (data["ok"] != null) {
-          if (data["ok"]) {
-            return data;
-          } else {
-            errorMessage(
-                "Gagal mengambil list jenis lokasi", "${data["message"]}");
-            return null;
-          }
-        } else {
-          showLoading();
-          // var responseLogout = logout();
-          // if (responseLogout != null) {
-          //   GetStorage().remove("token");
-          //   Get.off(() => LoginView());
-          //   onLoadingDismiss();
-          //   errorMessage("Token expired", "${data["message"]}");
-          // } else {
-          //   onLoadingDismiss();
-          //   errorMessage("Token expired", "${data["message"]}");
-          // }
-          return null;
-        }
-      } else {
-        errorMessage("Gagal mengambil list jenis lokasi", "Token kosong");
-        return null;
-      }
-    } catch (e) {
-      errorMessage("Gagal mengambil list jenis lokasi", "$e");
-      return null;
-    }
-  }
 
 
   Future attendance(
@@ -288,55 +243,7 @@ class ServiceProvider extends GetConnect {
 
 
 
-  Future fetchDataListLokasi(int idJenis) async {
-    GetStorage box = GetStorage();
 
-    try {
-      final token = await box.read("token");
-      final username = await box.read("username");
-
-      print("username: $username");
-
-      String url = '$urlApi/lokasi-vital/list?id_jenis=$idJenis';
-
-      if (token != null) {
-        final response = await get(url,
-            headers: {'Authorization': "bearer $username $token"});
-        var data = response.body;
-
-        print("data fetchDataListLokasi : $data");
-
-        if (data["ok"] != null) {
-          if (data["ok"]) {
-            return data;
-          } else {
-            errorMessage(
-                "Gagal mengambil data list lokasi", "${data["message"]}");
-            return null;
-          }
-        } else {
-          // showLoading();
-          // var responseLogout = logout();
-          // if (responseLogout != null) {
-          //   GetStorage().remove("token");
-          //   Get.off(() => LoginView());
-          //   onLoadingDismiss();
-          //   errorMessage("Token expired", "${data["message"]}");
-          // } else {
-          //   onLoadingDismiss();
-          //   errorMessage("Token expired", "${data["message"]}");
-          // }
-          return null;
-        }
-      } else {
-        errorMessage("Gagal mengambil data list lokasi", "Token kosong");
-        return null;
-      }
-    } catch (e) {
-      errorMessage("Gagal mengambil data list lokasi", "$e");
-      return null;
-    }
-  }
 
 
 

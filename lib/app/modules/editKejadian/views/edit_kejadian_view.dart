@@ -103,7 +103,7 @@ class EditKejadianView extends GetView<EditKejadianController> {
                         items: controller.listStatusKejadian
                             .map((e) => DropdownMenuItem<String>(
                                   value: e,
-                                  child: Text(e),
+                                  child: Text(e.toString().toUpperCase()),
                                 ))
                             .toList(),
                         onChanged: (value) {

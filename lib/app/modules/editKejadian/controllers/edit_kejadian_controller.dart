@@ -22,7 +22,7 @@ class EditKejadianController extends GetxController {
   String dokumentUrl = "";
   File? dokumentFile;
 
-  List listStatusKejadian = ["PENANGANAN", "SELESAI"];
+  List listStatusKejadian = ["diproses", "selesai"];
   RxString statusKejadian = "".obs;
 
   RxDouble lat = 0.0.obs;
@@ -134,7 +134,7 @@ class EditKejadianController extends GetxController {
     print("response:$response");
 
     if (response != null) {
-      if (response["ok"]) {
+      if (response["success"]) {
         DetailKejadianController detailKejadianController =
             Get.put(DetailKejadianController());
         await detailKejadianController.fetchDataDetailKejadian();

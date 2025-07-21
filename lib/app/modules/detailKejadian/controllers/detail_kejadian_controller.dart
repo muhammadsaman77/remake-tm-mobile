@@ -35,14 +35,16 @@ class DetailKejadianController extends GetxController {
 
     if (response["payload"] != null) {
       dataDetailKejadian =
-          KejadianDetail.fromJson(response["payload"]);
+          KejadianDetail.fromJson(response["payload"]["incident"]);
 
       // Ambil data log
-      // if (response["data"]["kejadian_log"] != null) {
-      //   dataLog.value =
-      //       List<Map<String, dynamic>>.from(response["data"]["kejadian_log"]);
-      //   // updateDataWithLatestLog();
-      // }
+      if (response["payload"]["log"] != null) {
+        print(response);
+        dataLog.value =
+            List<Map<String, dynamic>>.from(response["payload"]["log"]);
+        print(dataLog.value);
+        updateDataWithLatestLog();
+      }
 
       isDetailKejadianExist.value = true;
       update();

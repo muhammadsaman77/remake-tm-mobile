@@ -1,9 +1,10 @@
 import 'package:get/get.dart';
+import 'package:talabang_mandau/app/data/providers/location_provider.dart';
 import 'package:talabang_mandau/app/data/service_provider.dart';
 
 class LocationVitalController extends GetxController {
   //TODO: Implement LocationVitalController
-
+  final locationProvider = LocationProvider();
   List<LokasiVital> listLokasi = [];
   RxBool isListLokasiExist = false.obs;
 
@@ -26,12 +27,12 @@ class LocationVitalController extends GetxController {
   }
 
   fetchJenisLokasi() async {
-    var response = await ServiceProvider().fetchJenisLokasi();
+    var response = await locationProvider.fetchJenisLokasi();
 
     print("response: $response");
 
     if (response != null) {
-      List listData = response["data"];
+      List listData = response["payload"];
       for (var i = 0; i < listData.length; i++) {
         listJenisLokasi.add(
             JenisLokasi(id: listData[i]["id"], jenis: listData[i]["jenis"]));
@@ -45,13 +46,13 @@ class LocationVitalController extends GetxController {
   fetchDataListLokasi() async {
     isListLokasiExist.value = false;
 
-    var response = await ServiceProvider().fetchDataListLokasi(jenisLokasi!.id);
+    var response = await locationProvider.fetchDataListLokasi(jenisLokasi!.id);
 
     print("response:$response");
 
     if (response != null) {
-      if (response["ok"]) {
-        listLokasi = (response["data"] as List<dynamic>)
+      if (response["success"]) {
+        listLokasi = (response["payload"] as List<dynamic>)
             .map((item) => LokasiVital(
                   namaTempat: item["nama_tempat"],
                   lokasi: item["lokasi"],

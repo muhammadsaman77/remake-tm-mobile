@@ -164,7 +164,7 @@ class CreateKejadianController extends GetxController {
 
   createIncident() async {
     showLoading();
-    print(lat.value is double);
+
     var response = await incidentProvider.createIncident(
         dateController.text,
         lat.value,

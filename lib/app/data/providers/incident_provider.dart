@@ -154,11 +154,8 @@ class IncidentProvider extends GetConnect{
 
     try {
       final token = await box.read("token");
-      final username = await box.read("username");
 
       final formData = FormData({
-        "nrp": username,
-        "id_kejadian": idKejadian,
         "detail": detail,
         "status": status,
         "lat": lat,
@@ -166,15 +163,15 @@ class IncidentProvider extends GetConnect{
         'dokumentasi': MultipartFile(dokumentasi,
             filename: dokumentasi!.path.split('/').last),
       });
-
+      print(formData);
       if (token != null) {
-        final response = await post('$urlApi/kejadian/update', formData,
-            headers: {'Authorization': "bearer $username $token"});
+        final response = await post('$urlApi/api/incidents/$idKejadian', formData,
+            headers: {'Authorization': "Bearer $token","Accept":'application/json'});
         var data = response.body;
 
         print("data update kejadian : $data");
 
-        if (data["ok"]) {
+        if (data["success"]) {
           return data;
         } else {
           errorMessage("Gagal update kejadian", "${data["message"]}");
