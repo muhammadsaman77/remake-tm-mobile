@@ -12,10 +12,9 @@ class IncidentProvider extends GetConnect{
 
     try {
       final token = await box.read("token");
-      final username = await box.read("username");
+
 
       final formData = FormData({
-        'nrp': username,
         'waktu_kejadian': date,
         'lat': lat,
         'lng': lng,
@@ -26,13 +25,13 @@ class IncidentProvider extends GetConnect{
         MultipartFile(imageFile, filename: imageFile.path.split('/').last),
       });
       if (token != null) {
-        final response = await post('$urlApi/kejadian/submit', formData,
-            headers: {'Authorization': "bearer $username $token"});
+        final response = await post('$urlApi/api/incidents/', formData,
+            headers: {'Authorization': "Bearer $token"});
         var data = response.body;
 
         print("data createIncident : $data");
 
-        if (data["ok"]) {
+        if (response.isOk) {
           return data;
         } else {
           errorMessage("Gagal Membuat Kejadian", "${data["message"]}");
@@ -197,23 +196,15 @@ class IncidentProvider extends GetConnect{
 
     try {
       final token = await box.read("token");
-      final username = await box.read("username");
-
       if (token != null) {
-        final response = await get('$urlApi/kejadian/jenis?nrp=$username',
-            headers: {'Authorization': "bearer $username $token"});
+        final response = await get('$urlApi/api/incidents/types',
+            headers: {'Authorization': "Bearer $token"});
         var data = response.body;
 
         print("data fetchJenisKejadian : $data");
 
-        if (data["ok"] != null) {
-          if (data["ok"]) {
-            return data;
-          } else {
-            errorMessage(
-                "Gagal mengambil list jenis kejadian", "${data["message"]}");
-            return null;
-          }
+        if (response.isOk) {
+  return data;
         } else {
           // showLoading();
           // var responseLogout = logout();

@@ -53,8 +53,8 @@ class CreateKejadianController extends GetxController {
 
     print("response: $response");
 
-    if (response != null) {
-      List listData = response["data"];
+    if (response["payload"] != null) {
+      List listData = response["payload"];
       for (var i = 0; i < listData.length; i++) {
         listJenisKejadian.add(JenisKejadian(
             id: listData[i]["id"], jenis: listData[i]["jenis_kejadian"]));
@@ -164,6 +164,7 @@ class CreateKejadianController extends GetxController {
 
   createIncident() async {
     showLoading();
+    print(lat.value is double);
     var response = await incidentProvider.createIncident(
         dateController.text,
         lat.value,
@@ -175,7 +176,7 @@ class CreateKejadianController extends GetxController {
 
     print("response: $response");
 
-    if (response != null) {
+    if (response["success"]== true) {
       KejadianController kejadianController = Get.put(KejadianController());
       await kejadianController.fetchDataListKejadian();
       Get.back();
