@@ -113,18 +113,18 @@ class KejadianView extends GetView<KejadianController> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: primaryColor,
-        onPressed: () {
-          Get.to(() => CreateKejadianView());
-        },
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
-        ), // Ikon di FAB
-        tooltip: 'Add Item', // Tooltip ketika FAB disentuh
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      // floatingActionButton: FloatingActionButton(
+      //   backgroundColor: primaryColor,
+      //   onPressed: () {
+      //     Get.to(() => CreateKejadianView());
+      //   },
+      //   child: Icon(
+      //     Icons.add,
+      //     color: Colors.white,
+      //   ), // Ikon di FAB
+      //   tooltip: 'Add Item', // Tooltip ketika FAB disentuh
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 

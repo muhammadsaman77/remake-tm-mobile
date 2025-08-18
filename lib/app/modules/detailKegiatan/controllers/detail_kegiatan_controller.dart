@@ -36,15 +36,15 @@ class DetailKegiatanController extends GetxController {
         await activityProvider.fetchDataDetailKegiatan(dataKegiatan!.id);
     print("response: $response");
 
-    if (response["payload"] != null) {
+    if (response["payload"]["kegiatan"] != null) {
       dataDetailKegiatan =
-          KegiatanDetail.fromJson(response["payload"]);
+          KegiatanDetail.fromJson(response["payload"]["kegiatan"]);
 
       // Ambil data log
-      // if (response["data"]["kegiatan_log"] != null) {
-      //   dataLog.value =
-      //       List<Map<String, dynamic>>.from(response["data"]["kegiatan_log"]);
-      // }
+      if (response["payload"]["log"] != null) {
+        dataLog.value =
+            List<Map<String, dynamic>>.from(response["payload"]["log"]);
+      }
 
       isDetailKegiatanExist.value = true;
       update();

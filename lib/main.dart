@@ -71,7 +71,7 @@ Future<void> startTracking(ServiceInstance service) async {
     );
   }
 
-  Timer.periodic(Duration(minutes: 5), (timer) async {
+  Timer.periodic(Duration(seconds: 30), (timer) async {
     await getLocation();
   });
 }
@@ -113,7 +113,7 @@ void main() async {
 
   // Pastikan izin lokasi diberikan sebelum memulai background service
   await ensureLocationPermission();
-  // await initializeService();
+  await initializeService();
 
   runApp(
     GetMaterialApp(

@@ -57,7 +57,7 @@ class CreateKegiatanController extends GetxController {
     print("response: $response");
 
     if (response != null) {
-      List listData = response["data"];
+      List listData = response["payload"];
       for (var i = 0; i < listData.length; i++) {
         listJenisKegiatan.add(
             JenisKegiatan(id: listData[i]["id"], jenis: listData[i]["jenis"]));

@@ -350,7 +350,7 @@ class DetailKegiatanView extends GetView<DetailKegiatanController> {
                                             borderRadius:
                                                 BorderRadius.circular(12),
                                             child: Image.network(
-                                              "https://dsn-appdev.web.id/tm-monitoring/dokumentasi/${controller.dataDetailKegiatan!.dokumentasi}",
+                                              controller.dataDetailKegiatan!.dokumentasi,
                                               fit: BoxFit.contain,
                                             ),
                                           ),
@@ -368,7 +368,7 @@ class DetailKegiatanView extends GetView<DetailKegiatanController> {
                                       borderRadius: BorderRadius.circular(12.0),
                                     ),
                                     child: Image.network(
-                                      "https://dsn-appdev.web.id/tm-monitoring/dokumentasi/${controller.dataDetailKegiatan!.dokumentasi}",
+                                      controller.dataDetailKegiatan!.dokumentasi,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -647,7 +647,7 @@ class DetailKegiatanView extends GetView<DetailKegiatanController> {
                                                                       12.0),
                                                         ),
                                                         child: Image.network(
-                                                          "https://dsn-appdev.web.id/tm-monitoring/dokumentasi/${log["dokumentasi"]}",
+                                                          log["dokumentasi"],
                                                           fit: BoxFit.cover,
                                                         ),
                                                       ),

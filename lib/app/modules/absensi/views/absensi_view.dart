@@ -37,181 +37,191 @@ class AbsensiView extends GetView<AbsensiController> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Form(
-          key: _formKey, // Tambahkan form key di sini
-          child: Container(
-            margin: const EdgeInsets.all(12.0),
-            padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  spreadRadius: 1,
-                  blurRadius: 6,
-                  offset: Offset(0, 3), // Shadow position
-                ),
-              ],
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Obx(() => DropdownButtonFormField<String>(
-                      value: controller.typeAbsensi.value.isEmpty
-                          ? null
-                          : controller.typeAbsensi.value,
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.access_time),
-                        labelText: 'Pilih Tipe Absensi',
-                        border: OutlineInputBorder(
+      body: RefreshIndicator(
+        onRefresh: () async{
+          await controller.fetchJenisDinas();
+          print("======");
+          print('Tipe jenisDinas: ${controller.jenisDinas.runtimeType}');
+          print("======");
+
+        },
+        child: SingleChildScrollView(
+          child: Form(
+            key: _formKey, // Tambahkan form key di sini
+            child: Container(
+              margin: const EdgeInsets.all(12.0),
+              padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    spreadRadius: 1,
+                    blurRadius: 6,
+                    offset: Offset(0, 3), // Shadow position
+                  ),
+                ],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Obx(() => DropdownButtonFormField<String>(
+                        value: controller.typeAbsensi.value.isEmpty
+                            ? null
+                            : controller.typeAbsensi.value,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.access_time),
+                          labelText: 'Pilih Tipe Absensi',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                        ),
+                        items: controller.listTypeAbsensi
+                            .map((e) => DropdownMenuItem<String>(
+                                  value: e,
+                                  child: Text(e),
+                                ))
+                            .toList(),
+                        onChanged: null,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Type Absensi wajib dipilih';
+                          }
+                          return null;
+                        },
+                      )),
+                  SizedBox(height: 24),
+                  Obx(() => DropdownButtonFormField<String>(
+                        value: controller.lokasi.value.isEmpty
+                            ? null
+                            : controller.lokasi.value,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.location_on),
+                          labelText: 'Pilih Lokasi',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                        ),
+                        items: controller.listLokasi
+                            .map((e) => DropdownMenuItem<String>(
+                                  value: e,
+                                  child: Text(e),
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          controller.lokasi.value = value ?? '';
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Lokasi wajib dipilih';
+                          }
+                          return null;
+                        },
+                      )),
+                  SizedBox(height: 24),
+                  Obx(() => DropdownButtonFormField<String>(
+                        value: controller.kondisi.value.isEmpty
+                            ? null
+                            : controller.kondisi.value,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.health_and_safety),
+                          labelText: 'Pilih Kondisi',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                        ),
+                        items: controller.listKondisi
+                            .map((e) => DropdownMenuItem<String>(
+                                  value: e,
+                                  child: Text(e),
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          controller.kondisi.value = value ?? '';
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Kondisi wajib dipilih';
+                          }
+                          return null;
+                        },
+                      )),
+                  SizedBox(height: 24),
+                  Obx(() => DropdownButtonFormField<int>(
+                        value: controller.jenisDinas.value == 0 ? null : controller.jenisDinas.value,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.work),
+                          labelText: 'Pilih Jenis Dinas',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                        ),
+                        items: controller.listJenisDinas
+                            .map((e) => DropdownMenuItem<int>(
+                                  value:  e['id'] as int,
+                                  child: SizedBox(
+                                      width:
+                                          MediaQuery.sizeOf(context).width - 190,
+                                      child: Text(
+                                        e['kegiatan'],
+                                        overflow: TextOverflow.ellipsis,
+                                      )),
+                                ))
+                            .toList(),
+                        onChanged: (value) {
+                          if (value!=null){
+                            controller.jenisDinas.value = value;
+                          }
+
+                        },
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Jenis Dinas wajib dipilih';
+                          }
+                          return null;
+                        },
+                      )),
+                  SizedBox(height: 24),
+                  koordinatLokasi(context),
+                  SizedBox(height: 24),
+                  Obx(
+                    () => GestureDetector(
+                      onTap: () => controller.showImagePicker(context),
+                      child: Container(
+                        height: 100,
+                        width: MediaQuery.sizeOf(context).width,
+                        clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(
+                          color: Color(0xFFC4C4C4),
                           borderRadius: BorderRadius.circular(12.0),
                         ),
+                        child: controller.dokumentasi.value.isEmpty
+                            ? Center(
+                                child: Icon(Icons.camera_alt),
+                              )
+                            : Image.file(
+                                File(controller.dokumentasi.value),
+                                fit: BoxFit.cover,
+                              ),
                       ),
-                      items: controller.listTypeAbsensi
-                          .map((e) => DropdownMenuItem<String>(
-                                value: e,
-                                child: Text(e),
-                              ))
-                          .toList(),
-                      onChanged: null,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Type Absensi wajib dipilih';
-                        }
-                        return null;
-                      },
-                    )),
-                SizedBox(height: 24),
-                Obx(() => DropdownButtonFormField<String>(
-                      value: controller.lokasi.value.isEmpty
-                          ? null
-                          : controller.lokasi.value,
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.location_on),
-                        labelText: 'Pilih Lokasi',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                      ),
-                      items: controller.listLokasi
-                          .map((e) => DropdownMenuItem<String>(
-                                value: e,
-                                child: Text(e),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        controller.lokasi.value = value ?? '';
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Lokasi wajib dipilih';
-                        }
-                        return null;
-                      },
-                    )),
-                SizedBox(height: 24),
-                Obx(() => DropdownButtonFormField<String>(
-                      value: controller.kondisi.value.isEmpty
-                          ? null
-                          : controller.kondisi.value,
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.health_and_safety),
-                        labelText: 'Pilih Kondisi',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                      ),
-                      items: controller.listKondisi
-                          .map((e) => DropdownMenuItem<String>(
-                                value: e,
-                                child: Text(e),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        controller.kondisi.value = value ?? '';
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Kondisi wajib dipilih';
-                        }
-                        return null;
-                      },
-                    )),
-                SizedBox(height: 24),
-                Obx(() => DropdownButtonFormField<String>(
-                      value: controller.jenisDinas.value.isEmpty
-                          ? null
-                          : controller.jenisDinas.value,
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.work),
-                        labelText: 'Pilih Jenis Dinas',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                      ),
-                      items: controller.listJenisDinas
-                          .map((e) => DropdownMenuItem<String>(
-                                value: e,
-                                child: SizedBox(
-                                    width:
-                                        MediaQuery.sizeOf(context).width - 190,
-                                    child: Text(
-                                      e,
-                                      overflow: TextOverflow.ellipsis,
-                                    )),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        controller.jenisDinas.value = value ?? '';
-                      },
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Jenis Dinas wajib dipilih';
-                        }
-                        return null;
-                      },
-                    )),
-                SizedBox(height: 24),
-                koordinatLokasi(context),
-                SizedBox(height: 24),
-                Obx(
-                  () => GestureDetector(
-                    onTap: () => controller.showImagePicker(context),
-                    child: Container(
-                      height: 100,
-                      width: MediaQuery.sizeOf(context).width,
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFC4C4C4),
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      child: controller.dokumentasi.value.isEmpty
-                          ? Center(
-                              child: Icon(Icons.camera_alt),
-                            )
-                          : Image.file(
-                              File(controller.dokumentasi.value),
-                              fit: BoxFit.cover,
-                            ),
                     ),
                   ),
-                ),
-                SizedBox(height: 24),
-                PrimaryButton(
-                  text: "Kirim",
-                  onTap: () {
-                    if (_formKey.currentState!.validate() &&
-                        controller.dokumentasi.isNotEmpty) {
-                      controller.sendAttendance();
-                    } else {
-                      Get.snackbar("Error", "Form tidak valid");
-                    }
-                  },
-                ),
-              ],
+                  SizedBox(height: 24),
+                  PrimaryButton(
+                    text: "Kirim",
+                    onTap: () {
+                      if (_formKey.currentState!.validate() &&
+                          controller.dokumentasi.isNotEmpty) {
+                        controller.sendAttendance();
+                      } else {
+                        Get.snackbar("Error", "Form tidak valid");
+                      }
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),

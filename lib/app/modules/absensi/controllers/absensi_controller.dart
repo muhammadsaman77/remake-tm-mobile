@@ -21,12 +21,12 @@ class AbsensiController extends GetxController {
   List<String> listTypeAbsensi = ["datang", "pulang"];
   List<String> listLokasi = ["Dinas Luar", "Rumah", "Kantor"];
   List<String> listKondisi = ["sehat", "kurang sehat", "sakit"];
-  RxList<String> listJenisDinas = <String>[].obs;
+  RxList listJenisDinas =  [].obs;
 
   RxString typeAbsensi = ''.obs;
   RxString lokasi = ''.obs;
   RxString kondisi = ''.obs;
-  RxString jenisDinas = ''.obs;
+  RxInt jenisDinas = 0.obs;
 
   RxDouble latitude = 0.0.obs;
   RxDouble longitude = 0.0.obs;
@@ -76,9 +76,9 @@ class AbsensiController extends GetxController {
     print("responseFetchJenisDinas: $responseFetchJenisDinas");
 
     if (responseFetchJenisDinas != null) {
-      List listData = responseFetchJenisDinas["data"];
+      List listData = responseFetchJenisDinas["payload"];
       for (var i = 0; i < listData.length; i++) {
-        listJenisDinas.add(listData[i].toString());
+        listJenisDinas.add(listData[i]);
       }
     }
   }
@@ -246,7 +246,7 @@ class AbsensiController extends GetxController {
       typeAbsensi.value = "";
       lokasi.value = "";
       kondisi.value = "";
-      jenisDinas.value = "";
+      jenisDinas.value = 0;
       latitude.value = 0.0;
       longitude.value = 0.0;
       koordinatController.clear();
@@ -262,7 +262,7 @@ class AbsensiController extends GetxController {
       typeAbsensi.value = "";
       lokasi.value = "";
       kondisi.value = "";
-      jenisDinas.value = "";
+      jenisDinas.value = 0;
       latitude.value = 0.0;
       longitude.value = 0.0;
       koordinatController.clear();

@@ -116,17 +116,7 @@ class LoginView extends GetView<LoginController> {
                       },
                     ),
                   ),
-                  SizedBox(height: 12),
-                  Row(
-                    children: [
-                      CText("Lupa Password?"),
-                      CText(
-                        " Hubungi Helpdesk",
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF3E8BE1),
-                      ),
-                    ],
-                  ),
+
                   SizedBox(height: 36),
                   PrimaryButton(
                     text: "Masuk",

@@ -130,7 +130,7 @@ class ProfileView extends GetView<ProfileController> {
                           ),
                           CText(
                             controller.dataProfile != null
-                                ? controller.dataProfile!.kesatuan.kesatuan
+                                ? controller.dataProfile!.kesatuan
                                 : "-",
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -159,22 +159,22 @@ class ProfileView extends GetView<ProfileController> {
                       SizedBox(
                         height: 24,
                       ),
-                      ListTile(
-                        contentPadding: EdgeInsets.all(0),
-                        dense: true,
-                        onTap: () {
-                          // Get.to(() => DetailNewsView());
-                        },
-                        title: CText(
-                          "Bantuan",
-                          fontSize: 14,
-                        ),
-                        trailing: Icon(
-                          Icons.arrow_forward_ios_sharp,
-                          size: 16,
-                        ),
-                      ),
-                      Divider(),
+                      // ListTile(
+                      //   contentPadding: EdgeInsets.all(0),
+                      //   dense: true,
+                      //   onTap: () {
+                      //     // Get.to(() => DetailNewsView());
+                      //   },
+                      //   title: CText(
+                      //     "Bantuan",
+                      //     fontSize: 14,
+                      //   ),
+                      //   trailing: Icon(
+                      //     Icons.arrow_forward_ios_sharp,
+                      //     size: 16,
+                      //   ),
+                      // ),
+                      // Divider(),
                       ListTile(
                         contentPadding: EdgeInsets.all(0),
                         dense: true,

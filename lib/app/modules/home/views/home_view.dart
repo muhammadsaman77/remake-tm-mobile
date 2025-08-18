@@ -10,6 +10,7 @@ import 'package:talabang_mandau/app/modules/kegiatan/views/kegiatan_view.dart';
 import 'package:talabang_mandau/app/modules/kejadian/views/kejadian_view.dart';
 import 'package:talabang_mandau/app/modules/locationVital/views/location_vital_view.dart';
 import 'package:talabang_mandau/app/modules/videoCall/screens/prepare_videocall.dart';
+import 'package:talabang_mandau/app/modules/videoCall/views/select_videocall_view.dart';
 import 'package:talabang_mandau/app/modules/videoCall/views/video_call_view.dart';
 import 'package:talabang_mandau/app/widgets/text.dart';
 
@@ -35,9 +36,7 @@ class HomeView extends GetView<HomeController> {
           body: RefreshIndicator(
             onRefresh: ()async{
               await controller.fetchDataProfile();
-              print("=====");
-              print(controller.dataProfile!.kesatuan.kesatuan);
-              print("=====");
+
             },
             child: SingleChildScrollView(
               physics: AlwaysScrollableScrollPhysics(),
@@ -64,7 +63,7 @@ class HomeView extends GetView<HomeController> {
                                     child: Image.network(
                                       controller.dataProfile != null
                                           ? controller.dataProfile!.photo != null
-                                              ? "https://dsn-appdev.web.id/tm-monitoring/dokumentasi/${controller.dataProfile!.photo!}"
+                                              ? controller.dataProfile!.photo!
                                               : "https://dsn-appdev.web.id/tm-monitoring/dokumentasi/photos/default-user-photo.png"
                                           : "https://dsn-appdev.web.id/tm-monitoring/dokumentasi/photos/default-user-photo.png",
                                       fit: BoxFit.cover,
@@ -95,11 +94,7 @@ class HomeView extends GetView<HomeController> {
                                     ],
                                   ),
                                   Spacer(),
-                                  Icon(
-                                    Icons.support_agent,
-                                    color: Colors.white,
-                                    size: 24,
-                                  ),
+                                  
                                   SizedBox(
                                     width: 16,
                                   ),
@@ -141,7 +136,7 @@ class HomeView extends GetView<HomeController> {
                                                   CText(
                                                     controller.dataProfile != null
                                                         ? controller
-                                                            .dataProfile!.kesatuan.kesatuan
+                                                            .dataProfile!.kesatuan
                                                         : "",
                                                     fontSize: 14,
                                                     fontWeight: FontWeight.bold,
@@ -277,7 +272,7 @@ class HomeView extends GetView<HomeController> {
                     height: 24,
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                    padding: EdgeInsets.symmetric(vertical: 12),
                     margin: EdgeInsets.symmetric(horizontal: 24),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -296,18 +291,20 @@ class HomeView extends GetView<HomeController> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
                           children: [
                             featureCard("Kegiatan", "assets/icon/mobile.png", () {
                               Get.to(() => KegiatanView());
                             }),
+                            Spacer(),
                             featureCard("Lapor Kejadian", "assets/icon/file.png",
                                 () {
                               Get.to(() => KejadianView());
                             }),
+                            Spacer(),
                             featureCard(
                                 "Video Call", "assets/icon/video-call.png", () {
-                              controller.fetchDataSessions();
+                              Get.to(()=> SelectVideocallView());
                             })
                           ],
                         ),
@@ -315,18 +312,20 @@ class HomeView extends GetView<HomeController> {
                           height: 12,
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
                           children: [
                             featureCard(
                                 "Lokasi Vital", "assets/icon/location.png", () {
                               Get.to(() => LocationVitalView());
                             }),
+                            Spacer(),
                             featureCard(
                                 "HT Gateway", "assets/icon/walkie-talkie.png",
                                 () {
                               errorMessage("Coming Soon!",
                                   "Layanan ini akan segera hadir.");
                             }),
+                            Spacer(),
                             featureCard("BEAT", "assets/icon/pin.png", () {
                               Get.to(
                                 () => BeatView(),

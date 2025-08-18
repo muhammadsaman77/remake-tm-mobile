@@ -24,14 +24,13 @@ import 'package:talabang_mandau/app/widgets/text.dart';
 class VideocallWidget extends StatefulWidget {
   const VideocallWidget({
     super.key,
-    required this.server,
+
     required this.sessionId,
     required this.userName,
     required this.secret,
     required this.iceServer,
   });
 
-  final String server;
   final String sessionId;
   final String userName;
   final String secret;
@@ -154,14 +153,14 @@ class _VideocallWidgetState extends State<VideocallWidget> {
   }
 
   Future<void> _connect() async {
-    var responseSession = await CallProviders().createSession();
+    var responseSession = await CallProviders().createSession(widget.sessionId);
     print("responseSession:$responseSession");
     if (responseSession != null) {
       var responseToken = await CallProviders().createToken(responseSession);
       print("responseToken:$responseToken");
 
       if (responseToken != null) {
-        session = Session("sessionId", responseToken);
+        session = Session(responseSession, responseToken);
         session?.messageStream.listen((message) {
           setState(() {});
         });
@@ -452,21 +451,21 @@ class _VideocallWidgetState extends State<VideocallWidget> {
               color: Colors.white,
             ),
           ),
-          _noHeroFloatingActionButton(
-            backgroundColor: primaryColor,
-            onPressed: _showMessages,
-            tooltip: 'Messages',
-            icon: const Icon(
-              Icons.message_sharp,
-              color: Colors.white,
-            ),
-            badge: (session?.unreadMessages ?? 0) == 0
-                ? null
-                : Text(
-                    "${session?.unreadMessages}",
-                    style: const TextStyle(color: Colors.white, fontSize: 11.0),
-                  ),
-          ),
+          // _noHeroFloatingActionButton(
+          //   backgroundColor: primaryColor,
+          //   onPressed: _showMessages,
+          //   tooltip: 'Messages',
+          //   icon: const Icon(
+          //     Icons.message_sharp,
+          //     color: Colors.white,
+          //   ),
+          //   badge: (session?.unreadMessages ?? 0) == 0
+          //       ? null
+          //       : Text(
+          //           "${session?.unreadMessages}",
+          //           style: const TextStyle(color: Colors.white, fontSize: 11.0),
+          //         ),
+          // ),
         ],
       ),
     );

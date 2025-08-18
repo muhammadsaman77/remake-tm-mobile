@@ -7,53 +7,13 @@ import 'package:talabang_mandau/app/env/global_var.dart';
 import 'package:talabang_mandau/app/modules/login/views/login_view.dart';
 
 class CallProviders extends GetConnect{
-  Future getSessionId() async {
+  Future createSession(String sessionName) async {
     GetStorage box = GetStorage();
-
     try {
       final token = await box.read("token");
-      final username = await box.read("username");
-
-      if (token != null) {
-        final response = await get('$urlApi/api/vidcall/session',
-            headers: {'Authorization': "Bearer $token","Accept": "application/json",});
-        var data = response.body;
-        if (response.isOk) {
-          print(data);
-          return data;
-        } else {
-          showLoading();
-          var responseLogout = await AuthProvider().logout();
-          if (responseLogout != null) {
-            GetStorage().remove("token");
-            Get.off(() => LoginView());
-            onLoadingDismiss();
-            errorMessage("Token expired", "${data["message"]}");
-          } else {
-            onLoadingDismiss();
-            errorMessage("Token expired", "${data["message"]}");
-          }
-          return null;
-        }
-      } else {
-        errorMessage("Gagal mengambil list Session Id", "Token kosong");
-        return null;
-      }
-    } catch (e) {
-      errorMessage("Gagal mengambil list Session Id", "$e");
-      return null;
-    }
-  }
-  Future createSession() async {
-    GetStorage box = GetStorage();
-
-    try {
-      final token = await box.read("token");
-      final username = await box.read("username");
-
       if (token != null) {
         final response = await post('$urlVidcall/api/sessions', {
-          "customSessionId": "SessionTest",
+          "customSessionId": sessionName,
         }, headers: {
           'Content-type': "application/json"
         });
@@ -83,12 +43,12 @@ class CallProviders extends GetConnect{
 
     try {
       final token = await box.read("token");
-      final username = await box.read("username");
+
 
       if (token != null) {
         final response =
         await post('$urlVidcall/api/sessions/$sessionId/connections', {
-          "customSessionId": "SessionTest",
+          "customSessionId": sessionId,
         }, headers: {
           'Content-type': "application/json"
         });
@@ -114,5 +74,35 @@ class CallProviders extends GetConnect{
     }
   }
 
+  Future createNotify(int kesatuanId)async {
+    GetStorage box = GetStorage();
+    try {
+      final token = await box.read("token");
+      final formData = FormData({
+        'target_kesatuan_id': kesatuanId,
+      });
+      if (token != null) {
+        final response = await post('$urlApi/api/notify-call/', formData,
+            headers: {'Authorization': "Bearer $token","Accept":"application/json"});
+        var data = response.body;
+        print("data notify : $data");
+        print("data notify : $data");
 
+        if (response.isOk) {
+          return data;
+        } else {
+          errorMessage("Gagal Membuat notify", "${data["message"]}");
+          return null;
+        }
+      } else {
+        errorMessage("Gagal Membuat notify", "Token kosong");
+
+        return null;
+      }
+    }
+    catch (e) {
+      errorMessage("Gagal Membuat notify", "$e");
+      return null;
+    }
+  }
 }

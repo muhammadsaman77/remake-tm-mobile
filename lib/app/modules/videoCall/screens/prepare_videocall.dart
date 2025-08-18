@@ -4,8 +4,11 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:logging/logging.dart';
+import 'package:talabang_mandau/app/modules/home/controllers/home_controller.dart';
 
 import 'package:talabang_mandau/app/modules/videoCall/screens/videocall.dart';
 
@@ -31,7 +34,7 @@ class _PrepareVideocallState extends State<PrepareVideocall> {
   void initState() {
     super.initState();
 
-    _textSessionController = TextEditingController(text: 'SessionTest');
+    _textSessionController = TextEditingController(text: 'POLRESBANJAR');
     _textUserNameController =
         TextEditingController(text: 'FlutterUser${Random().nextInt(1000)}');
     _textUrlController =
@@ -182,8 +185,7 @@ class _PrepareVideocallState extends State<PrepareVideocall> {
                             MaterialPageRoute(builder: (context) {
                           _saveSharedPref();
                           return VideocallWidget(
-                            server:
-                                '${_textUrlController.text}:${_textPortController.text}',
+
                             sessionId: _textSessionController.text,
                             userName: _textUserNameController.text,
                             secret: _textSecretController.text,

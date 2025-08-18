@@ -346,7 +346,7 @@ class DetailKejadianView extends GetView<DetailKejadianController> {
                                             borderRadius:
                                                 BorderRadius.circular(12),
                                             child: Image.network(
-                                              "https://dsn-appdev.web.id/tm-monitoring/dokumentasi/${controller.dataDetailKejadian!.dokumentasi}",
+                                              controller.dataDetailKejadian!.dokumentasi,
                                               fit: BoxFit.contain,
                                             ),
                                           ),
@@ -364,7 +364,7 @@ class DetailKejadianView extends GetView<DetailKejadianController> {
                                       borderRadius: BorderRadius.circular(12.0),
                                     ),
                                     child: Image.network(
-                                      "https://dsn-appdev.web.id/tm-monitoring/dokumentasi/${controller.dataDetailKejadian!.dokumentasi}",
+                                      controller.dataDetailKejadian!.dokumentasi,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -575,7 +575,7 @@ class DetailKejadianView extends GetView<DetailKejadianController> {
                                                                             12),
                                                                 child: Image
                                                                     .network(
-                                                                  "https://dsn-appdev.web.id/tm-monitoring/dokumentasi/${log["dokumentasi"]}",
+                                                                  log["dokumentasi"],
                                                                   fit: BoxFit
                                                                       .contain,
                                                                 ),
@@ -603,7 +603,7 @@ class DetailKejadianView extends GetView<DetailKejadianController> {
                                                                       12.0),
                                                         ),
                                                         child: Image.network(
-                                                          "https://dsn-appdev.web.id/tm-monitoring/dokumentasi/${log["dokumentasi"]}",
+                                                          log["dokumentasi"],
                                                           fit: BoxFit.cover,
                                                         ),
                                                       ),

@@ -12,7 +12,7 @@ import 'package:talabang_mandau/app/data/service_provider.dart';
 import 'package:talabang_mandau/app/modules/videoCall/screens/videocall.dart';
 
 class HomeController extends GetxController {
-  //TODO: Implement HomeController
+
   UserData? dataProfile;
   GetStorage box = GetStorage();
   @override
@@ -57,7 +57,8 @@ class HomeController extends GetxController {
             Get.context, "Video Call Masuk", "Join panggilan Video Call?", () {
           if (!isCallOngoing) {
             Get.back();
-            fetchDataSessions();
+            final sessionName = message.data['session_name'];
+            startVidcall(sessionName);
           }
         });
 
@@ -96,31 +97,13 @@ class HomeController extends GetxController {
 
   bool isCallOngoing = false;
 
-  Future fetchDataSessions() async {
-    showLoading();
-    var response = await CallProviders().getSessionId();
-  print("=======");
-    print("fetchDataSessions:$response");
-    print("=======");
-
-      if (response["payload"] != null) {
-
-        startVidcall(response["payload"]["session_name"]);
-        onLoadingDismiss();
-      } else {
-        onLoadingDismiss();
-      }
-
-  }
-
   startVidcall(sessionName) {
       isCallOngoing = true; // Tandai panggilan sedang berlangsung
     Navigator.push(Get.context!, MaterialPageRoute(builder: (context) {
       // _saveSharedPref();
       return VideocallWidget(
-        server: 'dsn-appdev.web.id/tm-vcall-server',
         sessionId: sessionName,
-        userName: "saman",
+        userName: dataProfile!.nama,
         secret: "dsn@ppD3V24",
         iceServer: "stun.l.google.com:19302",
       );

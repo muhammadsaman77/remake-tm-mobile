@@ -217,12 +217,12 @@ class CustomWebSocket {
   }
 
   /// Sends the joinRoom to WebSocket server
-  void joinRoom() {
+  void joinRoom(String sessionName) {
     final joinRoomParams = {
       JsonConstants.metadata:
           '{"clientData": "${session.localParticipant?.participantName}"}',
       'secret': '',
-      'session': "SessionTest",
+      'session': sessionName,
       'platform':
           '${Platform.isAndroid ? "Android" : "iOS"} ${Platform.operatingSystemVersion}',
       'token': session.token,
@@ -477,7 +477,7 @@ class CustomWebSocket {
 
     _logger.info('Connected');
     pingMessageHandler();
-    joinRoom();
+    joinRoom(session.id);
   }
 
   /// Handles the disconnection from the WebSocket server

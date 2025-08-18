@@ -11,22 +11,13 @@ class ActivityProvider extends GetConnect{
 
     try {
       final token = await box.read("token");
-      final username = await box.read("username");
 
-      print("username: $username");
 
       String url = "$urlApi/api/activities";
 
-      // if (status == "Semua") {
-      //   url =
-      //       '$urlApi/kegiatan/list?nrp=$username&status=$status&durasi=$durasi';
-      // } else {
-      //   url = '$urlApi/kegiatan/list?nrp=$username&status=$status';
-      // }
-
       if (token != null) {
         final response = await get(url,
-            headers: {'Authorization': "Bearer $token"});
+            headers: {'Authorization': "Bearer $token",'Accept':"Application/json"});
         var data = response.body;
 
         print("data fetchDataProfile : $data");
@@ -79,10 +70,8 @@ class ActivityProvider extends GetConnect{
 
     try {
       final token = await box.read("token");
-      final username = await box.read("username");
 
       final formData = FormData({
-        'nrp': username,
         'waktu_kegiatan': startDate,
         'waktu_selesai': endDate,
         'daftar_rekan': rekan,
@@ -96,13 +85,13 @@ class ActivityProvider extends GetConnect{
       });
 
       if (token != null) {
-        final response = await post('$urlApi/kegiatan/submit', formData,
-            headers: {'Authorization': "bearer $username $token"});
+        final response = await post('$urlApi/api/activities', formData,
+            headers: {'Authorization': "Bearer $token"});
         var data = response.body;
 
         print("data createActivity : $data");
 
-        if (data["ok"]) {
+        if (data["success"]) {
           return data;
         } else {
           errorMessage("Gagal Membuat Kegiatan", "${data["message"]}");
@@ -168,7 +157,6 @@ class ActivityProvider extends GetConnect{
 
     try {
       final token = await box.read("token");
-      final username = await box.read("username");
 
       final formData;
 
@@ -177,8 +165,6 @@ class ActivityProvider extends GetConnect{
       if (dokumentasi != null) {
         print("dokumentasi 1 : $dokumentasi");
         formData = FormData({
-          "nrp": username,
-          "id_kegiatan": idKegiatan,
           "detail": detail,
           'dokumentasi': MultipartFile(dokumentasi,
               filename: dokumentasi!.path.split('/').last),
@@ -186,20 +172,18 @@ class ActivityProvider extends GetConnect{
       } else {
         print("dokumentasi 2 : $dokumentasi");
         formData = FormData({
-          "nrp": username,
-          "id_kegiatan": idKegiatan,
           "detail": detail,
         });
       }
 
       if (token != null) {
-        final response = await post('$urlApi/kegiatan/update', formData,
-            headers: {'Authorization': "bearer $username $token"});
+        final response = await post('$urlApi/api/activities/$idKegiatan', formData,
+            headers: {'Authorization': "Bearer $token"});
         var data = response.body;
 
         print("data update kegiatan : $data");
 
-        if (data["ok"]) {
+        if (data["success"]) {
           return data;
         } else {
           errorMessage("Gagal update kegiatan", "${data["message"]}");
@@ -224,7 +208,7 @@ class ActivityProvider extends GetConnect{
 
 
       if (token != null) {
-        final response = await get('$urlApi/kegiatan/jenis?nrp=',
+        final response = await get('$urlApi/api/activities/types',
             headers: {'Authorization': "Bearer $token"});
         var data = response.body;
 

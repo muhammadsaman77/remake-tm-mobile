@@ -1,33 +1,10 @@
-class Kesatuan {
-  final int id;
-  final String kesatuan;
-
-  Kesatuan({
-    required this.id,
-    required this.kesatuan,
-  });
-
-  factory Kesatuan.fromJson(Map<String, dynamic> json) {
-    return Kesatuan(
-      id: json['id'],
-      kesatuan: json['kesatuan'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'kesatuan': kesatuan,
-    };
-  }
-}
 
 class UserData {
   final String nrp;
   final String nama;
   final String? photo;
-  final Kesatuan kesatuan;
-  final String? statusDinasId;
+  final String kesatuan;
+  final int? statusDinasId;
   final String? statusDinasKegiatan;
   final DateTime? absensiWaktuDatang;
   final DateTime? absensiWaktuPulang;
@@ -48,7 +25,7 @@ class UserData {
       nrp: json['nrp'],
       nama: json['nama'],
       photo: json['photo'],
-      kesatuan: Kesatuan.fromJson(json['kesatuan']),
+      kesatuan: json['kesatuan'],
       statusDinasId: json['status_dinas_id'],
       statusDinasKegiatan: json['status_dinas_kegiatan'],
       absensiWaktuDatang: json['absensi_waktu_datang'] != null
@@ -65,7 +42,7 @@ class UserData {
       'nrp': nrp,
       'nama': nama,
       'photo': photo,
-      'kesatuan': kesatuan.toJson(),
+      'kesatuan': kesatuan,
       'status_dinas_id': statusDinasId,
       'status_dinas_kegiatan': statusDinasKegiatan,
       'absensi_waktu_datang': absensiWaktuDatang?.toIso8601String(),

@@ -14,12 +14,11 @@ class ServiceProvider extends GetConnect {
 
     try {
       final token = await box.read("token");
-      final username = await box.read("username");
 
       if (token != null) {
-        final response = await post('$urlApi/update-user-loc',
-            {"nrp": username, "lat": lat.toString(), "lng": lng.toString()},
-            headers: {'Authorization': "bearer $username $token"});
+        final response = await post('$urlApi/api/update-user-loc',
+            {"lat": lat, "lng": lng},
+            headers: {'Authorization': "Bearer $token"});
         var data = response.body;
 
         print("data sendLocation : $data");
@@ -48,17 +47,18 @@ class ServiceProvider extends GetConnect {
 
     try {
       final token = await box.read("token");
-      final username = await box.read("username");
 
       if (token != null) {
-        final response = await get('$urlApi/get-jenis-dinas',
-            headers: {'Authorization': "bearer $username $token"});
+        final response = await get('$urlApi/api/dinas-types',
+            headers: {
+          'Accept':"Application/json",
+          'Authorization': "Bearer $token"});
         var data = response.body;
 
         print("data fetchJenisDinas : $data");
 
-        if (data["ok"] != null) {
-          if (data["ok"]) {
+        if (data["success"] != null) {
+          if (data["success"]) {
             return data;
           } else {
             errorMessage(
@@ -99,16 +99,16 @@ class ServiceProvider extends GetConnect {
       double lat,
       double lng,
       double acc,
-      String jenisDinas,
+      int jenisDinas,
       File imageFile) async {
     GetStorage box = GetStorage();
 
     try {
       final token = await box.read("token");
-      final username = await box.read("username");
+
 
       final formData = FormData({
-        'nrp': username,
+
         'type_absensi': typeAbsensi,
         'lokasi': lokasi,
         'kondisi': kondisi,
@@ -121,13 +121,13 @@ class ServiceProvider extends GetConnect {
       });
 
       if (token != null) {
-        final response = await post('$urlApi/absensi/submit', formData,
-            headers: {'Authorization': "bearer $username $token"});
+        final response = await post('$urlApi/api/attendances', formData,
+            headers: {'Authorization': "Bearer $token","Accept":"application/json"});
         var data = response.body;
 
         print("data attendance : $data");
 
-        if (data["ok"]) {
+        if (data["success"]) {
           return data;
         } else {
           errorMessage("Gagal Absensi", "${data["message"]}");

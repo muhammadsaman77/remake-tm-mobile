@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:talabang_mandau/app/data/dataUser.dart';
@@ -11,11 +13,6 @@ class ProfileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
     getDataProfile();
   }
 
@@ -25,9 +22,17 @@ class ProfileController extends GetxController {
   }
 
   getDataProfile() {
-    if (box.read("userData") != null) {
-      dataProfile = UserData.fromJson(box.read("userData"));
-      update();
+    try {
+      final stored = box.read("userData");
+      if (stored != null) {
+        final parsed = stored is String ? jsonDecode(stored) : stored;
+        dataProfile = UserData.fromJson(parsed);
+        update();
+      }
+    } catch (e, stack) {
+      print("❌ Error parsing userData: $e");
+      print(stack);
     }
   }
+
 }

@@ -120,7 +120,7 @@ class EditKegiatanController extends GetxController {
     print("response:$response");
 
     if (response != null) {
-      if (response["ok"]) {
+      if (response["success"]) {
         DetailKegiatanController detailKegiatanController =
             Get.put(DetailKegiatanController());
         await detailKegiatanController.fetchDataDetailKegiatan();
